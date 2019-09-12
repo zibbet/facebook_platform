@@ -1,3 +1,5 @@
+require 'koala'
+
 require 'facebook_platform/version'
 
 module FacebookPlatform
