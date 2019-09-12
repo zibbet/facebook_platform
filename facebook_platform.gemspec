@@ -10,7 +10,7 @@ Gem::Specification.new do |spec|
 
   spec.summary       = 'Provides a friendly ruby-like wrapper for the Facebook Graph API'
   spec.description   = 'A friendly Ruby interface to the Facebook Graph API'
-  spec.homepage      = 'http://github.com/zibbet/facebook_platfrom'
+  spec.homepage      = 'http://github.com/zibbet/facebook_platform'
   spec.license       = 'MIT'
 
   # Prevent pushing this gem to RubyGems.org. To allow pushes either set the 'allowed_push_host'
@@ -19,8 +19,8 @@ Gem::Specification.new do |spec|
 
   spec.metadata['allowed_push_host'] = "TODO: Set to 'http://mygemserver.com'"
   spec.metadata['homepage_uri'] = spec.homepage
-  spec.metadata['source_code_uri'] = 'http://github.com/zibbet/facebook_platfrom'
-  spec.metadata['changelog_uri'] = 'http://github.com/zibbet/facebook_platfrom/CHANGELOG.md'
+  spec.metadata['source_code_uri'] = 'http://github.com/zibbet/facebook_platform'
+  spec.metadata['changelog_uri'] = 'http://github.com/zibbet/facebook_platform/CHANGELOG.md'
 
   # Specify which files should be added to the gem when it is released.
   # The `git ls-files -z` loads the files in the RubyGem that have been added into git.
