@@ -1,4 +1,5 @@
-require 'koala'
+require 'faraday'
+require 'json'
 
 require 'facebook_platform/version'
 
