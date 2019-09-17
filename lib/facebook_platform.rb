@@ -1,5 +1,6 @@
 require 'faraday'
 require 'json'
+require 'openssl'
 
 require 'facebook_platform/version'
 require 'facebook_platform/api'

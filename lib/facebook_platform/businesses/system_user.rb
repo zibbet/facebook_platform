@@ -28,6 +28,18 @@ module FacebookPlatform
         validate_role(role)
       end
 
+      def generate_access_token(app_id:, app_secret:, scope:, access_token:)
+        hmac = OpenSSL::HMAC.hexdigest(OpenSSL::Digest.new('sha256'), app_secret, access_token)
+        result = API.post(
+          "#{@id}/access_tokens",
+          business_app: app_id,
+          scope: scope,
+          appsecret_proof: hmac,
+          access_token: access_token
+        )
+        result['access_token']
+      end
+
       def admin?
         @role == 'ADMIN'
       end

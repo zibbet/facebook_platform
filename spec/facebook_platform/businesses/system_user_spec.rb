@@ -69,4 +69,25 @@ RSpec.describe FacebookPlatform::Businesses::SystemUser do
       expect(obj.admin?).to be_falsey
     end
   end
+
+  context '#generate_access_token' do
+    it 'generates a long term access token for system user' do
+      expect(FacebookPlatform::API).to receive(:post).with(
+        '1234567890/access_tokens',
+        business_app: '123',
+        scope: 'business_management,manage_pages',
+        appsecret_proof: '542e3ca3202c918604c6be2a3baaafdec08b86d4194797bf370a745a26ae7b82',
+        access_token: 'ABC123'
+      ).and_return('access_token' => 'PERMANENT_TOKEN_123')
+
+      system_user = described_class.new(id: '1234567890', role: 'ADMIN', name: 'Darth Vader')
+      token = system_user.generate_access_token(
+        app_id: '123',
+        app_secret: 'ABC',
+        scope: 'business_management,manage_pages',
+        access_token: 'ABC123'
+      )
+      expect(token).to eq('PERMANENT_TOKEN_123')
+    end
+  end
 end
