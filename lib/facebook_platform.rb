@@ -2,6 +2,9 @@ require 'faraday'
 require 'json'
 
 require 'facebook_platform/version'
+require 'facebook_platform/api'
+require 'facebook_platform/businesses/business'
+require 'facebook_platform/businesses/system_user'
 
 module FacebookPlatform
   class Error < StandardError; end
