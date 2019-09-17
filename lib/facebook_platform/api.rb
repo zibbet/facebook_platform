@@ -38,7 +38,7 @@ module FacebookPlatform
       body = JSON.parse(resp.body)
       raise Error.new(error_details: body['error']) if body['error']
 
-      body['data']
+      body
     end
   end
 end

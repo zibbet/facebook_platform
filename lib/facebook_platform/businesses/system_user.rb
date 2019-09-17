@@ -7,18 +7,14 @@ module FacebookPlatform
       VALID_ROLES = %w[ADMIN EMPLOYEE].freeze
 
       def self.all(access_token:, business_id:)
-        json = API.get("#{business_id}/system_users", access_token: access_token)
-        json.map { |hash| new(id: hash['id'], name: hash['name'], role: hash['role']) }
+        result = API.get("#{business_id}/system_users", access_token: access_token)
+        result['data'].map { |hash| new(id: hash['id'], name: hash['name'], role: hash['role']) }
       end
 
       def self.create(access_token:, business_id:, role:, name:)
         validate_role(role)
-        API.post("#{business_id}/system_users", access_token: access_token, role: role, name: name)
-        # TODO: waiting FB approval
-        # TODO: return SystemUserObject
-        # {
-        #   "id" : "100000008899900"
-        # }
+        result = API.post("#{business_id}/system_users", access_token: access_token, role: role, name: name)
+        new(id: result['id'], name: name, role: role)
       end
 
       def self.validate_role(value)

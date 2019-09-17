@@ -23,13 +23,14 @@ RSpec.describe FacebookPlatform::Businesses::SystemUser do
         '123/system_users',
         access_token: 'ABC-123'
       ).and_return(
-        [
-          {
-            'id' => '1',
-            'name' => 'Darth Vader',
-            'role' => 'ADMIN'
-          }
-        ]
+        'data' =>
+          [
+            {
+              'id' => '1',
+              'name' => 'Darth Vader',
+              'role' => 'ADMIN'
+            }
+          ]
       )
 
       result = described_class.all(access_token: 'ABC-123', business_id: '123')
@@ -44,9 +45,9 @@ RSpec.describe FacebookPlatform::Businesses::SystemUser do
         access_token: 'ABC-123',
         role: 'ADMIN',
         name: 'Darth Vader'
-      )
-      described_class.create(access_token: 'ABC-123', business_id: '123', role: 'ADMIN', name: 'Darth Vader')
-      # TODO: waiting FB approval
+      ).and_return('id' => '100041623866064')
+      result = described_class.create(access_token: 'ABC-123', business_id: '123', role: 'ADMIN', name: 'Darth Vader')
+      expect(result).to have_attributes(id: '100041623866064', name: 'Darth Vader', role: 'ADMIN')
     end
 
     it 'raises an exception if role is invalid' do

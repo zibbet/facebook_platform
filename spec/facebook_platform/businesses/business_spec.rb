@@ -14,7 +14,7 @@ RSpec.describe FacebookPlatform::Businesses::Business do
     it 'returns an objects array created from a request results hash' do
       expect(FacebookPlatform::API).to receive(:get).with(
         'me/businesses', access_token: 'ABC-123'
-      ).and_return([{ 'id' => '1', 'name' => 'Death Star' }])
+      ).and_return('data' => [{ 'id' => '1', 'name' => 'Death Star' }])
       result = described_class.all(access_token: 'ABC-123')
       expect(result.first).to have_attributes(id: '1', name: 'Death Star')
     end
