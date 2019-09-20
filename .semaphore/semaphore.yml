@@ -1,0 +1,43 @@
+version: v1.0
+name: Ruby example
+agent:
+  machine:
+    type: e1-standard-2
+    os_image: ubuntu1804
+
+execution_time_limit:
+  hours: 1
+
+blocks:
+  name: Install dependencies
+    task:
+      jobs:
+        name: cache bundle
+          commands:
+            checkout
+            cache restore
+            bundle install --deployment --path vendor/bundle
+            cache store
+
+  name: Code Quality
+    task:
+      prologue:
+        commands:
+          sem-version ruby 2.6.4
+      jobs:
+        name: rubocop
+          commands:
+            gem install rubocop
+            bundle exec rubocop
+    name: Specs
+      task:
+        prologue:
+          commands:
+            checkout
+            cache restore
+            bundle install --deployment --path vendor/bundle
+            sem-version ruby 2.6.4
+      jobs:
+        name: Specs
+          commands:
+            bundle exec rspec
