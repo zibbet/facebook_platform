@@ -29,7 +29,6 @@ blocks:
           - cache restore gems-$SEMAPHORE_GIT_BRANCH-$(checksum Gemfile.lock),gems-$SEMAPHORE_GIT_BRANCH,gems-master
           - sem-version ruby 2.6.4
           - bundle install --deployment -j 4 --path vendor/bundle
-          - gem install rubocop
           - bundle exec rubocop
   - name: Specs
     task:
