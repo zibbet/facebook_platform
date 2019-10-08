@@ -15,18 +15,20 @@ blocks:
       - name: cache bundle
         commands:
           - checkout
-          - cache restore
-          - bundle install --deployment --path vendor/bundle
-          - cache store
+          - cache restore gems-$SEMAPHORE_GIT_BRANCH-$(checksum Gemfile.lock),gems-$SEMAPHORE_GIT_BRANCH,gems-master
+          - sem-version ruby 2.6.4
+          - bundle install --deployment -j 4 --path vendor/bundle
+          - cache store gems-$SEMAPHORE_GIT_BRANCH-$(checksum Gemfile.lock) vendor/bundle
 
   - name: Code Quality
     task:
-      prologue:
-        commands:
-          - sem-version ruby 2.6.4
       jobs:
       - name: rubocop
         commands:
+          - checkout
+          - cache restore gems-$SEMAPHORE_GIT_BRANCH-$(checksum Gemfile.lock),gems-$SEMAPHORE_GIT_BRANCH,gems-master
+          - sem-version ruby 2.6.4
+          - bundle install --deployment -j 4 --path vendor/bundle
           - gem install rubocop
           - bundle exec rubocop
   - name: Specs
@@ -34,9 +36,9 @@ blocks:
       prologue:
         commands:
           - checkout
-          - cache restore
-          - bundle install --deployment --path vendor/bundle
+          - cache restore gems-$SEMAPHORE_GIT_BRANCH-$(checksum Gemfile.lock)
           - sem-version ruby 2.6.4
+          - bundle install --deployment -j 4 --path vendor/bundle
       jobs:
       - name: Specs
         commands:
