@@ -14,30 +14,30 @@ blocks:
       jobs:
       - name: cache bundle
         commands:
-          checkout
-          cache restore
-          bundle install --deployment --path vendor/bundle
-          cache store
+          - checkout
+          - cache restore
+          - bundle install --deployment --path vendor/bundle
+          - cache store
 
   - name: Code Quality
     task:
       prologue:
         commands:
-          sem-version ruby 2.6.4
+          - sem-version ruby 2.6.4
       jobs:
       - name: rubocop
         commands:
-          gem install rubocop
-          bundle exec rubocop
+          - gem install rubocop
+          - bundle exec rubocop
   - name: Specs
     task:
       prologue:
         commands:
-          checkout
-          cache restore
-          bundle install --deployment --path vendor/bundle
-          sem-version ruby 2.6.4
+          - checkout
+          - cache restore
+          - bundle install --deployment --path vendor/bundle
+          - sem-version ruby 2.6.4
       jobs:
       - name: Specs
         commands:
-          bundle exec rspec
+          - bundle exec rspec
