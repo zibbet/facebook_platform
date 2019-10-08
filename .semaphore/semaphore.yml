@@ -9,7 +9,7 @@ execution_time_limit:
   hours: 1
 
 blocks:
-  name: Install dependencies
+  - name: Install dependencies
     task:
       jobs:
         name: cache bundle
@@ -19,7 +19,7 @@ blocks:
             bundle install --deployment --path vendor/bundle
             cache store
 
-  name: Code Quality
+  - name: Code Quality
     task:
       prologue:
         commands:
@@ -29,14 +29,14 @@ blocks:
           commands:
             gem install rubocop
             bundle exec rubocop
-    name: Specs
-      task:
-        prologue:
-          commands:
-            checkout
-            cache restore
-            bundle install --deployment --path vendor/bundle
-            sem-version ruby 2.6.4
+  - name: Specs
+    task:
+      prologue:
+        commands:
+          checkout
+          cache restore
+          bundle install --deployment --path vendor/bundle
+          sem-version ruby 2.6.4
       jobs:
         name: Specs
           commands:
