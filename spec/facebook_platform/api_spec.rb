@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'facebook_platform/api'
 
 RSpec.describe FacebookPlatform::API do

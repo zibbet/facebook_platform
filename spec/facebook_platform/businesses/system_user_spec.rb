@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'facebook_platform/api'
 require 'facebook_platform/businesses/system_user'
 

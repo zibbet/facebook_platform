@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module FacebookPlatform
   module Businesses
     # represents Facebook's System User entity

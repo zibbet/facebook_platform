@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module FacebookPlatform
   # The purpose of this class is to abstract HTTP based communication with Facebook API
   class API
