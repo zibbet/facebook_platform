@@ -1,0 +1,34 @@
+# frozen_string_literal: true
+
+require 'facebook_platform/api'
+require 'facebook_platform/products/feed'
+
+RSpec.describe FacebookPlatform::Products::Feed do
+  context '.new' do
+    it 'creates an instance and getters' do
+      catalog = described_class.new(id: 123)
+      expect(catalog.id).to eq(123)
+    end
+  end
+
+  context '.create' do
+    it 'returns a created object serialized from hash' do
+      expect(FacebookPlatform::API).to receive(:post).with(
+        '999022/product_feeds',
+        access_token: 'ABC-123',
+        name: 'Death Star',
+        schedule: {
+          interval: 'DAILY',
+          url: 'https://www.zibbet.com/path/to/upload_products.csv'
+        }
+      ).and_return('id' => '100041623866064')
+      result = described_class.create(
+        access_token: 'ABC-123',
+        catalog_id: '999022',
+        name: 'Death Star',
+        products_csv_url: 'https://www.zibbet.com/path/to/upload_products.csv'
+      )
+      expect(result).to have_attributes(id: '100041623866064')
+    end
+  end
+end
