@@ -6,8 +6,8 @@ module FacebookPlatform
     class Catalog
       attr_reader :id, :name
 
-      def self.create(access_token:, business_id:, name:)
-        result = API.post("#{business_id}/owned_product_catalogs", access_token: access_token, name: name)
+      def self.create(page_access_token:, business_id:, name: 'Zibbet')
+        result = API.post("#{business_id}/owned_product_catalogs", access_token: page_access_token, name: name)
         new(id: result['id'], name: name)
       end
 

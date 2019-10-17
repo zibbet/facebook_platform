@@ -19,7 +19,7 @@ RSpec.describe FacebookPlatform::Products::Catalog do
         access_token: 'ABC-123',
         name: 'Death Star'
       ).and_return('id' => '100041623866064')
-      result = described_class.create(access_token: 'ABC-123', business_id: '123', name: 'Death Star')
+      result = described_class.create(page_access_token: 'ABC-123', business_id: '123', name: 'Death Star')
       expect(result).to have_attributes(id: '100041623866064', name: 'Death Star')
     end
   end
