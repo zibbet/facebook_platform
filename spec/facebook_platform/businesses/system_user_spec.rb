@@ -60,6 +60,23 @@ RSpec.describe FacebookPlatform::Businesses::SystemUser do
     end
   end
 
+  context '.assign_page_permissions' do
+    it 'returns true on success' do
+      expect(FacebookPlatform::API).to receive(:post).with(
+        '123456/assigned_users',
+        access_token: 'ABC-123',
+        user: '9999',
+        tasks: ['MANAGE']
+      ).and_return('success' => true)
+      result = described_class.assign_page_permissions(
+        access_token: 'ABC-123',
+        page_id: '123456',
+        system_user_id: '9999'
+      )
+      expect(result).to be_truthy
+    end
+  end
+
   context '#admin' do
     it 'truthy id role is ADMIN' do
       obj = described_class.new(id: 1, role: 'ADMIN', name: 'Darth Vader')

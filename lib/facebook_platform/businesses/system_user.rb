@@ -19,6 +19,16 @@ module FacebookPlatform
         new(id: result['id'], name: name, role: role)
       end
 
+      # https://developers.facebook.com/docs/marketing-api/businessmanager/systemuser/?hc_location=ufi#permissions
+      # system_user_id - System user id that you created
+      # Tasks - Access type for this system user for Page:
+      # ['MANAGE'], ['CREATE_CONTENT'], ['MODERATE'], ['ADVERTISE'] and ['ANALYZE']
+      # access_token - of admin user or admin system user.
+      def self.assign_page_permissions(access_token:, page_id:, system_user_id:, tasks: ['MANAGE'])
+        result = API.post("#{page_id}/assigned_users", access_token: access_token, user: system_user_id, tasks: tasks)
+        result['success']
+      end
+
       def self.validate_role(value)
         raise ArgumentError, "The valid roles are #{VALID_ROLES.join(',')}" unless VALID_ROLES.include?(value)
       end
