@@ -11,6 +11,7 @@ require 'facebook_platform/businesses/system_user'
 require 'facebook_platform/businesses/page'
 require 'facebook_platform/products/catalog'
 require 'facebook_platform/products/feed'
+require 'facebook_platform/products/upload'
 require 'facebook_platform/pages/page'
 
 module FacebookPlatform
