@@ -31,4 +31,24 @@ RSpec.describe FacebookPlatform::Products::Feed do
       expect(result).to have_attributes(id: '100041623866064')
     end
   end
+
+  context '.update' do
+    it 'returns true on success' do
+      expect(FacebookPlatform::API).to receive(:post).with(
+        '999022',
+        access_token: 'ABC-123',
+        update_schedule: {
+          interval: 'DAILY',
+          url: 'https://www.zibbet.com/path/to/upload_products.csv',
+          hour: 23
+        }
+      ).and_return('success' => true)
+      result = described_class.update(
+        access_token: 'ABC-123',
+        product_feed_id: '999022',
+        products_csv_url: 'https://www.zibbet.com/path/to/upload_products.csv'
+      )
+      expect(result).to be_truthy
+    end
+  end
 end
