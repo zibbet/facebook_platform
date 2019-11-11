@@ -19,7 +19,8 @@ RSpec.describe FacebookPlatform::Products::Feed do
         name: 'Death Star',
         schedule: {
           interval: 'DAILY',
-          url: 'https://www.zibbet.com/path/to/upload_products.csv'
+          url: 'https://www.zibbet.com/path/to/upload_products.csv',
+          hour: 23
         }
       ).and_return('id' => '100041623866064')
       result = described_class.create(
