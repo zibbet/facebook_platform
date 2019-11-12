@@ -16,7 +16,7 @@ blocks:
         commands:
           - checkout
           - cache restore gems-$SEMAPHORE_GIT_BRANCH-$(checksum Gemfile.lock),gems-$SEMAPHORE_GIT_BRANCH,gems-master
-          - sem-version ruby 2.6.4
+          - sem-version ruby 2.6.5
           - bundle install --deployment -j 4 --path vendor/bundle
           - cache store gems-$SEMAPHORE_GIT_BRANCH-$(checksum Gemfile.lock) vendor/bundle
 
@@ -27,7 +27,7 @@ blocks:
         commands:
           - checkout
           - cache restore gems-$SEMAPHORE_GIT_BRANCH-$(checksum Gemfile.lock),gems-$SEMAPHORE_GIT_BRANCH,gems-master
-          - sem-version ruby 2.6.4
+          - sem-version ruby 2.6.5
           - bundle install --deployment -j 4 --path vendor/bundle
           - bundle exec rubocop
   - name: Specs
@@ -36,7 +36,7 @@ blocks:
         commands:
           - checkout
           - cache restore gems-$SEMAPHORE_GIT_BRANCH-$(checksum Gemfile.lock)
-          - sem-version ruby 2.6.4
+          - sem-version ruby 2.6.5
           - bundle install --deployment -j 4 --path vendor/bundle
       jobs:
       - name: Specs
