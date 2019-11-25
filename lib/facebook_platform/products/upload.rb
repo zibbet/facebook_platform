@@ -37,6 +37,16 @@ module FacebookPlatform
         result['data'].map { |hash| new(id: hash['id']) }
       end
 
+      #  One-Time Direct Upload
+      def self.create(access_token:, product_feed_id:, products_csv_url:)
+        result = API.post(
+          "#{product_feed_id}/uploads",
+          access_token: access_token,
+          url: products_csv_url
+        )
+        new(id: result['id'])
+      end
+
       def initialize(id:)
         @id = id
       end

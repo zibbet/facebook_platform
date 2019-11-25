@@ -81,5 +81,21 @@ RSpec.describe FacebookPlatform::Products::Upload do
                                           samples: data['samples'])
       end
     end
+
+    context '.create' do
+      it 'returns a created object serialized from hash' do
+        expect(FacebookPlatform::API).to receive(:post).with(
+          '12345678/uploads',
+          access_token: 'ABC-123',
+          url: 'https://url_to_csv_file_to_upload.csv'
+        ).and_return('id' => '100041623866064')
+        result = described_class.create(
+          access_token: 'ABC-123',
+          product_feed_id: '12345678',
+          products_csv_url: 'https://url_to_csv_file_to_upload.csv'
+        )
+        expect(result).to have_attributes(id: '100041623866064')
+      end
+    end
   end
 end
