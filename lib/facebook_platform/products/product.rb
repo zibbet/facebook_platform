@@ -9,13 +9,12 @@ module FacebookPlatform
         requests = retailer_ids.map do |retailer_id|
           { method: 'DELETE', data: { id: retailer_id } }
         end
-        result = API.post(
+        API.post(
           "#{catalog_id}/items_batch",
           access_token: access_token,
           item_type: 'PRODUCT_ITEM',
-          requests: requests
+          requests: requests.to_json
         )
-        result['handles']
       end
     end
   end
