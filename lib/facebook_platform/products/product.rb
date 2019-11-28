@@ -7,7 +7,7 @@ module FacebookPlatform
       # https://developers.facebook.com/docs/commerce-platform/catalog/batch-api
       def self.delete_all(access_token:, catalog_id:, retailer_ids:)
         requests = retailer_ids.map do |retailer_id|
-          { method: 'DELETE', data: { id: retailer_id } }
+          { method: 'DELETE', data: { id: retailer_id.to_s } }
         end
         API.post(
           "#{catalog_id}/items_batch",
