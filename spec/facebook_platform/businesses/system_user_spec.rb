@@ -77,6 +77,20 @@ RSpec.describe FacebookPlatform::Businesses::SystemUser do
     end
   end
 
+  context '.get_id' do
+    it 'returns user id' do
+      expect(FacebookPlatform::API).to receive(:get).with(
+        '/me',
+        access_token: 'ABC-123',
+        fields: 'id'
+      ).and_return('id' => 544)
+      result = described_class.get_id(
+        access_token: 'ABC-123'
+      )
+      expect(result).to eq(544)
+    end
+  end
+
   context '#admin' do
     it 'truthy id role is ADMIN' do
       obj = described_class.new(id: 1, role: 'ADMIN', name: 'Darth Vader')

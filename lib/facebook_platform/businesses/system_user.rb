@@ -29,6 +29,11 @@ module FacebookPlatform
         result['success']
       end
 
+      def self.get_id(access_token:)
+        result = API.get('/me', access_token: access_token, fields: 'id')
+        result['id']
+      end
+
       def self.validate_role(value)
         raise ArgumentError, "The valid roles are #{VALID_ROLES.join(',')}" unless VALID_ROLES.include?(value)
       end
