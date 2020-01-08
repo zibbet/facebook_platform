@@ -16,7 +16,7 @@ RSpec.describe FacebookPlatform::Businesses::Aggregator do
     end
   end
 
-  context '.get_client_system_user_token' do
+  context '.create_client_system_user' do
     it 'returns a access token' do
       expect(FacebookPlatform::API).to receive(:post).with(
         '456/access_token',
@@ -24,7 +24,7 @@ RSpec.describe FacebookPlatform::Businesses::Aggregator do
         app_id: '123',
         scope: 'ads_management,manage_pages'
       ).and_return('access_token' => '123FABC1231237567')
-      result = described_class.get_client_system_user_token(
+      result = described_class.create_client_system_user(
         access_token: 'ABC-123',
         business_id: '456',
         app_id: '123'

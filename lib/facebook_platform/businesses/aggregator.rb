@@ -16,14 +16,14 @@ module FacebookPlatform
         )
       end
 
-      # Fetch the access token of system user under the clients business manager
+      # Create a system user and fetch the access token under the clients business manager
       # Access Token Used: PARTNER_BM_ADMIN_SYSTEM_USER_ACCESS_TOKEN
       # curl -X POST \
       #  -F 'scope="ads_management,manage_pages"' \
       #  -F 'app_id={APP_ID}' \
       #  -F 'access_token=<ACCESS_TOKEN>' \
       #  https://graph.facebook.com/{MERCHANTS_BM_ID}/access_token
-      def self.get_client_system_user_token(access_token:, app_id:, business_id:, scope: 'ads_management,manage_pages')
+      def self.create_client_system_user(access_token:, app_id:, business_id:, scope: 'ads_management,manage_pages')
         result = API.post(
           "#{business_id}/access_token",
           access_token: access_token,
