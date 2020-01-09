@@ -29,6 +29,19 @@ module FacebookPlatform
         result['success']
       end
 
+      # Assign assets(Page, Catalog, Pixel etc) to SYSTEM USER in clients business manager.
+      # Access Token Used: USERS_ACCESS_TOKEN, tasks EDIT ANALYZE MANAGE etc
+      def self.assign_assets(access_token:, system_user_id:, business_id:, asset_id:, tasks: ['MANAGE'])
+        result = API.post(
+          "#{asset_id}/assigned_users",
+          access_token: access_token,
+          user: system_user_id,
+          tasks: tasks,
+          business: business_id
+        )
+        result['success']
+      end
+
       def self.get_id(access_token:)
         result = API.get('/me', access_token: access_token, fields: 'id')
         result['id']

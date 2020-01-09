@@ -77,6 +77,25 @@ RSpec.describe FacebookPlatform::Businesses::SystemUser do
     end
   end
 
+  context '.assign_assets' do
+    it 'returns true on success' do
+      expect(FacebookPlatform::API).to receive(:post).with(
+        '123456/assigned_users',
+        access_token: 'ABC-123',
+        user: '9999',
+        tasks: ['MANAGE'],
+        business: '98'
+      ).and_return('success' => true)
+      result = described_class.assign_assets(
+        access_token: 'ABC-123',
+        asset_id: '123456',
+        system_user_id: '9999',
+        business_id: '98'
+      )
+      expect(result).to be_truthy
+    end
+  end
+
   context '.get_id' do
     it 'returns user id' do
       expect(FacebookPlatform::API).to receive(:get).with(
