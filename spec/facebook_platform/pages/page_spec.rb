@@ -10,6 +10,7 @@ RSpec.describe FacebookPlatform::Pages::Page do
       expect(page.id).to eq(123)
       expect(page.name).to eq('Death Star')
       expect(page.access_token).to eq('')
+      expect(page.link).to eq('')
     end
   end
 
@@ -26,10 +27,20 @@ RSpec.describe FacebookPlatform::Pages::Page do
   context '.find' do
     it 'returns an objects created from a request result hash' do
       expect(FacebookPlatform::API).to receive(:get).with(
-        1_234_567, access_token: 'ABC-123', fields: 'access_token,name'
-      ).and_return('id' => '1234567', 'name' => 'Death Star', 'access_token' => 'ABC-123')
+        1_234_567, access_token: 'ABC-123', fields: 'access_token,name,link'
+      ).and_return(
+        'id' => '1234567',
+        'name' => 'Death Star',
+        'access_token' => 'ABC-123',
+        'link' => 'https://facebook.com/Death-Star-1234567'
+      )
       result = described_class.find(page_id: 1_234_567, access_token: 'ABC-123')
-      expect(result).to have_attributes(id: '1234567', name: 'Death Star', access_token: 'ABC-123')
+      expect(result).to have_attributes(
+        id: '1234567',
+        name: 'Death Star',
+        access_token: 'ABC-123',
+        link: 'https://facebook.com/Death-Star-1234567'
+      )
     end
   end
 end
