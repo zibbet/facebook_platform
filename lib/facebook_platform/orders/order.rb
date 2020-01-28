@@ -16,23 +16,37 @@ module FacebookPlatform
         end
       end
 
-      # rubocop:disable Metrics/MethodLength:
       def self.all(page_id:, access_token:, fields: 'id,buyer_details,channel,merchant_order_id,order_status')
-        # TODO: handle pagination
-        result = API.get("#{page_id}/commerce_orders", access_token: access_token, fields: fields)
-        result['data'].map do |hash|
-          new(
-            id: hash['id'],
-            buyer_details: BuyerDetails.new(
-              name: hash.dig('buyer_details', 'name'),
-              email: hash.dig('buyer_details', 'email')
-            ),
-            channel: hash['channel'],
-            state: hash.dig('order_status', 'state')
-          )
-        end
+        path = "#{page_id}/commerce_orders"
+        result = API.get(path, access_token: access_token, fields: fields)
+        orders = result['data'].map { |hash| build_new(hash) }
+        orders << next_page_orders(path, result.dig('paging', 'next'))
+        orders.flatten
       end
-      # rubocop:enable Metrics/MethodLength:
+
+      def self.next_page_orders(path, next_page_url, orders = [])
+        if next_page_url
+          query_string = next_page_url.split('?')[1]
+          result = API.get("#{path}?#{query_string}", {})
+          orders << result['data'].map { |hash| build_new(hash) }
+          next_page_orders(path, result.dig('paging', 'next'), orders)
+        end
+        orders
+      end
+      private_class_method :next_page_orders
+
+      def self.build_new(hash)
+        new(
+          id: hash['id'],
+          buyer_details: BuyerDetails.new(
+            name: hash.dig('buyer_details', 'name'),
+            email: hash.dig('buyer_details', 'email')
+          ),
+          channel: hash['channel'],
+          state: hash.dig('order_status', 'state')
+        )
+      end
+      private_class_method :build_new
 
       def initialize(id:, buyer_details:, channel:, state:)
         @id = id
