@@ -4,14 +4,42 @@ require 'json'
 require 'facebook_platform/api'
 require 'facebook_platform/orders/order'
 
+# rubocop:disable Metrics/BlockLength
 RSpec.describe FacebookPlatform::Orders::Order do
   context '.new' do
     it 'creates an instance and getters' do
-      order = described_class.new(id: 123, buyer_details: nil, channel: 'facebook', state: 'CREATED')
+      order = described_class.new(
+        'id' => 123,
+        'buyer_details' => nil,
+        'channel' => 'facebook',
+        'order_status' => { 'state' => 'CREATED' },
+        'estimated_payment_details' => {
+          'total_amount' => {
+            'amount' => '3.3',
+            'currency' => 'USD'
+          },
+          'tax' => {
+            'amount' => '1.1'
+          },
+          'subtotal' => {
+            'items' => {
+              'amount' => '2.1'
+            },
+            'shipping' => {
+              'amount' => '0.1'
+            }
+          }
+        }
+      )
       expect(order.id).to eq(123)
-      expect(order.buyer_details).to eq(nil)
+      expect(order.buyer_details).to be_kind_of(FacebookPlatform::Orders::Order::BuyerDetails)
       expect(order.channel).to eq('facebook')
       expect(order.state).to eq('CREATED')
+      expect(order.currency_code).to eq('USD')
+      expect(order.total_amount).to eq(3.3)
+      expect(order.total_tax_amount).to eq(1.1)
+      expect(order.items_total_amount).to eq(2.1)
+      expect(order.shipping_total_amount).to eq(0.1)
     end
   end
 
@@ -29,6 +57,27 @@ RSpec.describe FacebookPlatform::Orders::Order do
             "channel": "facebook",
             "order_status": {
               "state": "CREATED"
+            },
+            "estimated_payment_details": {
+                "subtotal": {
+                  "items": {
+                    "amount": "2.00",
+                    "currency": "USD"
+                  },
+                  "shipping": {
+                    "amount": "0.00",
+                    "currency": "USD"
+                  }
+                },
+                "tax": {
+                  "amount": "0.19",
+                  "currency": "USD"
+                },
+                "total_amount": {
+                  "amount": "2.19",
+                  "currency": "USD"
+                },
+                "tax_remitted": true
             }
           }
         ],
@@ -98,7 +147,7 @@ RSpec.describe FacebookPlatform::Orders::Order do
       expect(FacebookPlatform::API).to receive(:get).with(
         '12345/commerce_orders',
         access_token: 'ABC-123',
-        fields: 'id,buyer_details,channel,merchant_order_id,order_status'
+        fields: 'id,buyer_details,channel,merchant_order_id,order_status,estimated_payment_details'
       ).and_return(response)
 
       results = described_class.all(page_id: '12345', access_token: 'ABC-123')
@@ -109,13 +158,18 @@ RSpec.describe FacebookPlatform::Orders::Order do
       expect(first_record.buyer_details.email).to eq('n8miblde3i@marketplace.facebook.com')
       expect(first_record.channel).to eq('facebook')
       expect(first_record.state).to eq('CREATED')
+      expect(first_record.currency_code).to eq('USD')
+      expect(first_record.total_amount).to eq(2.19)
+      expect(first_record.total_tax_amount).to eq(0.19)
+      expect(first_record.items_total_amount).to eq(2.00)
+      expect(first_record.shipping_total_amount).to eq(0)
     end
 
     it 'returns an objects array created from a request of paginated results' do
       expect(FacebookPlatform::API).to receive(:get).with(
         '12345/commerce_orders',
         access_token: 'ABC-123',
-        fields: 'id,buyer_details,channel,merchant_order_id,order_status'
+        fields: 'id,buyer_details,channel,merchant_order_id,order_status,estimated_payment_details'
       ).and_return(response_with_next_page)
 
       expect(FacebookPlatform::API).to receive(:get).with(
@@ -141,3 +195,4 @@ RSpec.describe FacebookPlatform::Orders::Order do
     end
   end
 end
+# rubocop:enable Metrics/BlockLength
