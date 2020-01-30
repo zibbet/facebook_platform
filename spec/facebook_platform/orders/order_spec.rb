@@ -68,9 +68,9 @@ RSpec.describe FacebookPlatform::Orders::Order do
       expect(order.shipping_address.street1).to eq('12 Queen Street')
       expect(order.shipping_address.street2).to eq('')
       expect(order.shipping_address.city).to eq('Brisbane')
-      expect(order.shipping_address.state).to eq('QLD')
+      expect(order.shipping_address.state_code).to eq('QLD')
       expect(order.shipping_address.postal_code).to eq('4000')
-      expect(order.shipping_address.country).to eq('AU')
+      expect(order.shipping_address.country_code).to eq('AU')
       expect(order.items.first.retailer_id).to eq('6545')
       expect(order.items.first.quantity).to eq(2)
     end
@@ -239,9 +239,9 @@ RSpec.describe FacebookPlatform::Orders::Order do
       expect(first_record.shipping_address.street1).to eq('12 Queen Street')
       expect(first_record.shipping_address.street2).to eq('')
       expect(first_record.shipping_address.city).to eq('Brisbane')
-      expect(first_record.shipping_address.state).to eq('QLD')
+      expect(first_record.shipping_address.state_code).to eq('QLD')
       expect(first_record.shipping_address.postal_code).to eq('4000')
-      expect(first_record.shipping_address.country).to eq('AU')
+      expect(first_record.shipping_address.country_code).to eq('AU')
       expect(first_record.items.first.retailer_id).to eq('12345')
       expect(first_record.items.first.quantity).to eq(2)
     end

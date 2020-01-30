@@ -46,16 +46,16 @@ module FacebookPlatform
 
       # represents Facebook shipping_address object
       class ShippingAddress
-        attr_reader :name, :street1, :street2, :city, :state, :postal_code, :country
+        attr_reader :name, :street1, :street2, :city, :state_code, :postal_code, :country_code
 
         def initialize(properties)
           @name = properties['name']
           @street1 = properties['street1']
           @street2 = properties['street2']
           @city = properties['city']
-          @state = properties['state']
+          @state_code = properties['state']
           @postal_code = properties['postal_code']
-          @country = properties['country']
+          @country_code = properties['country']
         end
       end
 
