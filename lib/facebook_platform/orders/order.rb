@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'bigdecimal'
+require 'date'
 
 module FacebookPlatform
   module Orders
@@ -14,7 +15,11 @@ module FacebookPlatform
                   :total_amount,
                   :total_tax_amount,
                   :items_total_amount,
-                  :shipping_total_amount
+                  :shipping_total_amount,
+                  :shipping_address,
+                  :created_at,
+                  :updated_at,
+                  :items
 
       DEFAULT_FIELDS = %w[
         id
@@ -23,15 +28,44 @@ module FacebookPlatform
         merchant_order_id
         order_status
         estimated_payment_details
+        created
+        last_updated
+        shipping_address
+        items
       ].freeze
 
-      # represents Facebook Order buyer details
+      # represents Facebook buyer_details object
       class BuyerDetails
         attr_reader :name, :email
 
         def initialize(name:, email:)
           @name = name
           @email = email
+        end
+      end
+
+      # represents Facebook shipping_address object
+      class ShippingAddress
+        attr_reader :name, :street1, :street2, :city, :state, :postal_code, :country
+
+        def initialize(properties)
+          @name = properties['name']
+          @street1 = properties['street1']
+          @street2 = properties['street2']
+          @city = properties['city']
+          @state = properties['state']
+          @postal_code = properties['postal_code']
+          @country = properties['country']
+        end
+      end
+
+      # represents Facebook item object
+      class Item
+        attr_reader :retailer_id, :quantity
+
+        def initialize(retailer_id:, quantity:)
+          @retailer_id = retailer_id
+          @quantity = quantity
         end
       end
 
@@ -74,6 +108,10 @@ module FacebookPlatform
         @shipping_total_amount = BigDecimal(
           properties.dig('estimated_payment_details', 'subtotal', 'shipping', 'amount') || 0
         )
+        @shipping_address = ShippingAddress.new(properties['shipping_address'])
+        @created_at = DateTime.parse(properties['created'])
+        @updated_at = DateTime.parse(properties['last_updated'])
+        @items = properties['items'].map { |i| Item.new(retailer_id: i['retailer_id'], quantity: i['quantity']) }
       end
       # rubocop:enable Metrics/MethodLength
       # rubocop:enable Metrics/AbcSize
