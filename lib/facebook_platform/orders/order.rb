@@ -6,6 +6,7 @@ require 'date'
 module FacebookPlatform
   module Orders
     # represents Facebook's Commerce Platform Order entity
+    # https://developers.facebook.com/docs/commerce-platform/order-management/order-api
     class Order
       attr_reader :id,
                   :buyer_details,
@@ -69,9 +70,9 @@ module FacebookPlatform
         end
       end
 
-      def self.all(page_id:, access_token:, fields: DEFAULT_FIELDS.join(','))
+      def self.all(page_id:, access_token:, fields: DEFAULT_FIELDS.join(','), query_params: {})
         path = "#{page_id}/commerce_orders"
-        result = API.get(path, access_token: access_token, fields: fields)
+        result = API.get(path, query_params.merge(access_token: access_token, fields: fields))
         orders = result['data'].map { |hash| new(hash) }
         orders << next_page_orders(path, result.dig('paging', 'next'))
         orders.flatten

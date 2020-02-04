@@ -274,6 +274,22 @@ RSpec.describe FacebookPlatform::Orders::Order do
       expect(second_record.channel).to eq('facebook')
       expect(second_record.state).to eq('IN_PROGRESS')
     end
+
+    it 'sends additional query params to Facebook Order API' do
+      expect(FacebookPlatform::API).to receive(:get).with(
+        '12345/commerce_orders',
+        access_token: 'ABC-123',
+        fields: 'id,buyer_details,channel,merchant_order_id,order_status,estimated_payment_details,created,last_updated,shipping_address,items',
+        state: 'CREATED,IN_PROGRESS',
+        filters: 'no_cancellations'
+      ).and_return(response)
+
+      described_class.all(
+        page_id: '12345',
+        access_token: 'ABC-123',
+        query_params: { state: 'CREATED,IN_PROGRESS', filters: 'no_cancellations' }
+      )
+    end
   end
 end
 # rubocop:enable Metrics/BlockLength
