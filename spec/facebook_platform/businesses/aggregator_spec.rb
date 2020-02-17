@@ -31,5 +31,21 @@ RSpec.describe FacebookPlatform::Businesses::Aggregator do
       )
       expect(result).to eq('123FABC1231237567')
     end
+
+    it 'send system_user_name as a param' do
+      expect(FacebookPlatform::API).to receive(:post).with(
+        '456/access_token',
+        access_token: 'ABC-123',
+        app_id: '123',
+        scope: 'ads_management,manage_pages',
+        system_user_name: 'MY_CUSTOM_SYSTEM_USER_NAME'
+      ).and_return('access_token' => '123FABC1231237567')
+      described_class.create_client_system_user(
+        access_token: 'ABC-123',
+        business_id: '456',
+        app_id: '123',
+        system_user_name: 'MY_CUSTOM_SYSTEM_USER_NAME'
+      )
+    end
   end
 end

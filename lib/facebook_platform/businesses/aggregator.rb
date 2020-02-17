@@ -23,13 +23,21 @@ module FacebookPlatform
       #  -F 'app_id={APP_ID}' \
       #  -F 'access_token=<ACCESS_TOKEN>' \
       #  https://graph.facebook.com/{MERCHANTS_BM_ID}/access_token
-      def self.create_client_system_user(access_token:, app_id:, business_id:, scope: 'ads_management,manage_pages')
-        result = API.post(
-          "#{business_id}/access_token",
+      def self.create_client_system_user(
+        access_token:,
+        app_id:,
+        business_id:,
+        scope: 'ads_management,manage_pages',
+        system_user_name: nil
+      )
+        params = {
           access_token: access_token,
           app_id: app_id,
-          scope: scope
-        )
+          scope: scope,
+          system_user_name: system_user_name
+        }.compact
+
+        result = API.post("#{business_id}/access_token", params)
         result['access_token']
       end
     end
