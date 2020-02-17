@@ -35,6 +35,10 @@ module FacebookPlatform
       request(:post, path, params)
     end
 
+    def self.delete(path, params)
+      request(:delete, path, params)
+    end
+
     def self.request(method, path, params = {})
       resp = Faraday.send(method, api_url(path), params)
       body = JSON.parse(resp.body)

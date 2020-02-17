@@ -44,6 +44,13 @@ RSpec.describe FacebookPlatform::API do
     end
   end
 
+  context '.delete' do
+    it 'invokes .request with params' do
+      expect(described_class).to receive(:request).with(:delete, 'me/businesses', access_token: '123')
+      described_class.delete('me/businesses', access_token: '123')
+    end
+  end
+
   context '.request' do
     let(:success_response) { double 'Success Response', body: '{"data":{}}' }
     let(:error_response) { double 'Error Response', body: '{"error":{"message": "Facebook API error message"}}' }

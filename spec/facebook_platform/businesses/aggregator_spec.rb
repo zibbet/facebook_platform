@@ -16,6 +16,17 @@ RSpec.describe FacebookPlatform::Businesses::Aggregator do
     end
   end
 
+  context '.delete' do
+    it 'invokes Facebook API request' do
+      expect(FacebookPlatform::API).to receive(:delete).with(
+        '123/managed_businesses',
+        access_token: 'ABC-123',
+        existing_client_business_id: '456'
+      )
+      described_class.delete(access_token: 'ABC-123', partner_business_id: '123', client_business_id: '456')
+    end
+  end
+
   context '.create_client_system_user' do
     it 'returns a access token' do
       expect(FacebookPlatform::API).to receive(:post).with(

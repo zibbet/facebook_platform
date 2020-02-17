@@ -16,6 +16,15 @@ module FacebookPlatform
         )
       end
 
+      # Delete the On Behalf of relationship and remove the assigned System user under the clients Business Manager
+      def self.delete(access_token:, partner_business_id:, client_business_id:)
+        API.delete(
+          "#{partner_business_id}/managed_businesses",
+          access_token: access_token,
+          existing_client_business_id: client_business_id
+        )
+      end
+
       # Create a system user and fetch the access token under the clients business manager
       # Access Token Used: PARTNER_BM_ADMIN_SYSTEM_USER_ACCESS_TOKEN
       # curl -X POST \
