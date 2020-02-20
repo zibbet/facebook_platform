@@ -5,7 +5,7 @@ require 'facebook_platform/api'
 require 'facebook_platform/orders/order'
 
 # rubocop:disable Metrics/BlockLength
-# rubocop:disable  Metrics/LineLength
+# rubocop:disable  Layout/LineLength
 RSpec.describe FacebookPlatform::Orders::Order do
   context '.new' do
     it 'creates an instance and getters' do
@@ -293,4 +293,4 @@ RSpec.describe FacebookPlatform::Orders::Order do
   end
 end
 # rubocop:enable Metrics/BlockLength
-# rubocop:enable Metrics/LineLength
+# rubocop:enable Layout/LineLength
