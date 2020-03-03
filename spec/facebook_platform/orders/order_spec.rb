@@ -45,12 +45,14 @@ RSpec.describe FacebookPlatform::Orders::Order do
         },
         'created' => '2020-01-30T01:26:14+00:00',
         'last_updated' => '2020-02-25T01:14:12+00:00',
-        'items' => [
-          {
-            'retailer_id' => '6545',
-            'quantity' => 2
-          }
-        ]
+        'items' => {
+          'data' => [
+            {
+              'retailer_id' => '6545',
+              'quantity' => 2
+            }
+          ]
+        }
       )
       expect(order.id).to eq(123)
       expect(order.buyer_details.name).to eq('Darth Vader')
@@ -123,12 +125,14 @@ RSpec.describe FacebookPlatform::Orders::Order do
             },
             "created": "2020-01-30T01:26:14+00:00",
             "last_updated": "2020-02-25T01:14:12+00:00",
-            "items": [
-              {
-                "retailer_id": "12345",
-                "quantity": 2
-              }
-            ]
+            "items": {
+              "data": [
+                {
+                  "retailer_id": "12345",
+                  "quantity": 2
+                }
+              ]
+            }
           }
         ],
         "paging": {
@@ -165,7 +169,7 @@ RSpec.describe FacebookPlatform::Orders::Order do
             },
             "created": "2020-01-30T01:26:14+00:00",
             "last_updated": "2020-02-25T01:14:12+00:00",
-            "items": []
+            "items": {"data": []}
           }
         ],
         "paging": {
@@ -203,7 +207,7 @@ RSpec.describe FacebookPlatform::Orders::Order do
             },
             "created": "2020-01-30T01:26:14+00:00",
             "last_updated": "2020-02-25T01:14:12+00:00",
-            "items": []
+            "items": {"data": []}
           }
         ],
         "paging": {

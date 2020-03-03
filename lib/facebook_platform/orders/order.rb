@@ -112,7 +112,9 @@ module FacebookPlatform
         @shipping_address = ShippingAddress.new(properties['shipping_address'])
         @created_at = DateTime.parse(properties['created'])
         @updated_at = DateTime.parse(properties['last_updated'])
-        @items = properties['items'].map { |i| Item.new(retailer_id: i['retailer_id'], quantity: i['quantity']) }
+        @items = properties.dig('items', 'data').map do |i|
+          Item.new(retailer_id: i['retailer_id'], quantity: i['quantity'])
+        end
       end
       # rubocop:enable Metrics/MethodLength
       # rubocop:enable Metrics/AbcSize
