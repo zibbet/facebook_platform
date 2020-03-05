@@ -4,27 +4,51 @@ require 'facebook_platform/api'
 require 'facebook_platform/products/product'
 
 RSpec.describe FacebookPlatform::Products::Product do
-  context '.exists_in_catalog?' do
-    it 'returns true if a product was found by retailed_id in a catalog' do
+  context '#new' do
+    it 'returns a Product instance' do
+      result = described_class.new(id: '3385594441457124', name: 'Test Red Shirt', retailer_id: '15876_variant_id_7499')
+      expect(result.id).to eq('3385594441457124')
+      expect(result.name).to eq('Test Red Shirt')
+      expect(result.retailer_id).to eq('15876_variant_id_7499')
+    end
+  end
+
+  context '.find_by_retailer_id' do
+    it 'returns a Product instance if found' do
       expect(FacebookPlatform::API).to receive(:get).with(
         '12345/products',
         access_token: 'ABC-123',
-        filter: { retailer_id: { eq: 432 } },
-        summary: true
-      ).and_return('summary' => { 'total_count' => 1 })
-      result = described_class.exists_in_catalog?(access_token: 'ABC-123', catalog_id: '12345', retailer_id: 432)
-      expect(result).to be_truthy
+        filter: { retailer_id: { eq: 432 } }
+      ).and_return(
+        {
+          'data' =>
+            [
+              {
+                'id' => '3385594441457124',
+                'name' => 'Test Red Shirt',
+                'retailer_id' => '15876_variant_id_7499'
+              }
+            ]
+        }
+      )
+      result = described_class.find_by_retailer_id(access_token: 'ABC-123', catalog_id: '12345', retailer_id: 432)
+      expect(result.id).to eq('3385594441457124')
+      expect(result.name).to eq('Test Red Shirt')
+      expect(result.retailer_id).to eq('15876_variant_id_7499')
     end
 
-    it 'returns false if a product was not found by retailed_id in a catalog' do
+    it 'returns nil if not found' do
       expect(FacebookPlatform::API).to receive(:get).with(
         '12345/products',
         access_token: 'ABC-123',
-        filter: { retailer_id: { eq: 432 } },
-        summary: true
-      ).and_return('summary' => { 'total_count' => 0 })
-      result = described_class.exists_in_catalog?(access_token: 'ABC-123', catalog_id: '12345', retailer_id: 432)
-      expect(result).to be_falsey
+        filter: { retailer_id: { eq: 432 } }
+      ).and_return(
+        {
+          'data' => []
+        }
+      )
+      result = described_class.find_by_retailer_id(access_token: 'ABC-123', catalog_id: '12345', retailer_id: 432)
+      expect(result).to be_nil
     end
   end
 

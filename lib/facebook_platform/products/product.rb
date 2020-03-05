@@ -4,15 +4,17 @@ module FacebookPlatform
   module Products
     # represents Facebook's product catalog entity
     class Product
+      attr_reader :id, :name, :retailer_id
+
       # https://developers.facebook.com/docs/marketing-api/reference/product-catalog/products/
-      def self.exists_in_catalog?(access_token:, catalog_id:, retailer_id:)
+      def self.find_by_retailer_id(access_token:, catalog_id:, retailer_id:)
         result = API.get(
           "#{catalog_id}/products",
           access_token: access_token,
-          filter: { retailer_id: { eq: retailer_id } },
-          summary: true
+          filter: { retailer_id: { eq: retailer_id } }
         )
-        result.dig('summary', 'total_count') == 1
+        data = result['data'].first
+        data ? new(id: data['id'], name: data['name'], retailer_id: data['retailer_id']) : nil
       end
 
       # https://developers.facebook.com/docs/commerce-platform/catalog/batch-api
@@ -26,6 +28,12 @@ module FacebookPlatform
           item_type: 'PRODUCT_ITEM',
           requests: requests.to_json
         )
+      end
+
+      def initialize(id:, name:, retailer_id:)
+        @id = id
+        @name = name
+        @retailer_id = retailer_id
       end
     end
   end
