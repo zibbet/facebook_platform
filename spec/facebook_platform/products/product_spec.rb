@@ -18,7 +18,7 @@ RSpec.describe FacebookPlatform::Products::Product do
       expect(FacebookPlatform::API).to receive(:get).with(
         '12345/products',
         access_token: 'ABC-123',
-        filter: { retailer_id: { eq: 432 } }
+        filter: { retailer_id: { eq: '432_bla' } }
       ).and_return(
         {
           'data' =>
@@ -31,7 +31,7 @@ RSpec.describe FacebookPlatform::Products::Product do
             ]
         }
       )
-      result = described_class.find_by_retailer_id(access_token: 'ABC-123', catalog_id: '12345', retailer_id: 432)
+      result = described_class.find_by_retailer_id(access_token: 'ABC-123', catalog_id: '12345', retailer_id: '432_bla')
       expect(result.id).to eq('3385594441457124')
       expect(result.name).to eq('Test Red Shirt')
       expect(result.retailer_id).to eq('15876_variant_id_7499')
@@ -41,7 +41,7 @@ RSpec.describe FacebookPlatform::Products::Product do
       expect(FacebookPlatform::API).to receive(:get).with(
         '12345/products',
         access_token: 'ABC-123',
-        filter: { retailer_id: { eq: 432 } }
+        filter: { retailer_id: { eq: '432' } }
       ).and_return(
         {
           'data' => []

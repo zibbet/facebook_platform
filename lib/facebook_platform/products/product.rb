@@ -11,7 +11,7 @@ module FacebookPlatform
         result = API.get(
           "#{catalog_id}/products",
           access_token: access_token,
-          filter: { retailer_id: { eq: retailer_id } }
+          filter: { retailer_id: { eq: retailer_id.to_s } }
         )
         data = result['data'].first
         data ? new(id: data['id'], name: data['name'], retailer_id: data['retailer_id']) : nil
