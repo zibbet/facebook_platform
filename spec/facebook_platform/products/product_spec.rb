@@ -18,7 +18,7 @@ RSpec.describe FacebookPlatform::Products::Product do
       expect(FacebookPlatform::API).to receive(:get).with(
         '12345/products',
         access_token: 'ABC-123',
-        filter: { retailer_id: { eq: '432_bla' } }
+        filter: '{"retailer_id":{"eq":"432_bla"}}'
       ).and_return(
         {
           'data' =>
@@ -41,7 +41,7 @@ RSpec.describe FacebookPlatform::Products::Product do
       expect(FacebookPlatform::API).to receive(:get).with(
         '12345/products',
         access_token: 'ABC-123',
-        filter: { retailer_id: { eq: '432' } }
+        filter: '{"retailer_id":{"eq":"432"}}'
       ).and_return(
         {
           'data' => []
