@@ -11,7 +11,7 @@ RSpec.describe FacebookPlatform::API do
 
   context '.version' do
     it 'returns default facebook API version' do
-      expect(described_class.version).to eq('v4.0')
+      expect(described_class.version).to eq('v5.0')
     end
 
     it 'returns facebook API version from ENV' do
@@ -22,11 +22,11 @@ RSpec.describe FacebookPlatform::API do
 
   context '.api_url' do
     it 'returns facebook API url with default path' do
-      expect(described_class.api_url).to eq('https://graph.facebook.com/v4.0/')
+      expect(described_class.api_url).to eq('https://graph.facebook.com/v5.0/')
     end
 
     it 'returns facebook API url with provided path' do
-      expect(described_class.api_url('123/system_users')).to eq('https://graph.facebook.com/v4.0/123/system_users')
+      expect(described_class.api_url('123/system_users')).to eq('https://graph.facebook.com/v5.0/123/system_users')
     end
   end
 
@@ -57,7 +57,7 @@ RSpec.describe FacebookPlatform::API do
 
     it 'invokes Faraday client with params and returns json' do
       expect(Faraday).to receive(:send).with(
-        :get, 'https://graph.facebook.com/v4.0/me/businesses', access_token: '123'
+        :get, 'https://graph.facebook.com/v5.0/me/businesses', access_token: '123'
       ).and_return(success_response)
       described_class.request(:get, 'me/businesses', access_token: '123')
     end
@@ -65,7 +65,7 @@ RSpec.describe FacebookPlatform::API do
     it 'raises an exception if json returns an error response' do
       expect do
         expect(Faraday).to receive(:send).with(
-          :get, 'https://graph.facebook.com/v4.0/me/businesses', access_token: '123'
+          :get, 'https://graph.facebook.com/v5.0/me/businesses', access_token: '123'
         ).and_return(error_response)
         described_class.request(:get, 'me/businesses', access_token: '123')
       end.to raise_error(FacebookPlatform::API::Error, 'Facebook API error message')

@@ -20,7 +20,7 @@ module FacebookPlatform
     end
 
     def self.version
-      ENV['FACEBOOK_API_VERSION'] || 'v4.0'
+      ENV['FACEBOOK_API_VERSION'] || 'v5.0'
     end
 
     def self.api_url(path = '')
