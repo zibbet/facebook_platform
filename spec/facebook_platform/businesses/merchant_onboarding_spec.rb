@@ -27,4 +27,26 @@ RSpec.describe FacebookPlatform::Businesses::MerchantOnboarding do
       expect(result).to eq(page_id: '866', catalog_id: '123')
     end
   end
+
+  context '.associate_order_management' do
+    it 'returns true' do
+      expect(FacebookPlatform::API).to receive(:post).with(
+        '/1234567/order_management_apps', access_token: 'ABC-123'
+      ).and_return(
+        'success' => true
+      )
+      result = described_class.associate_order_management(access_token: 'ABC-123', cms_id: '1234567')
+      expect(result).to be_truthy
+    end
+
+    it 'returns false' do
+      expect(FacebookPlatform::API).to receive(:post).with(
+        '/1234567/order_management_apps', access_token: 'ABC-123'
+      ).and_return(
+        'success' => false
+      )
+      result = described_class.associate_order_management(access_token: 'ABC-123', cms_id: '1234567')
+      expect(result).to be_falsey
+    end
+  end
 end
