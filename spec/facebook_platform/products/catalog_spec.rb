@@ -23,4 +23,24 @@ RSpec.describe FacebookPlatform::Products::Catalog do
       expect(result).to have_attributes(id: '100041623866064', name: 'Death Star')
     end
   end
+
+  context '.delete' do
+    it 'returns true if operation was successful' do
+      expect(FacebookPlatform::API).to receive(:delete).with(
+        '123456',
+        access_token: 'ABC-123'
+      ).and_return('success' => true)
+      result = described_class.delete(access_token: 'ABC-123', catalog_id: '123456')
+      expect(result).to be_truthy
+    end
+
+    it 'returns false if operation was not successful' do
+      expect(FacebookPlatform::API).to receive(:delete).with(
+        '123456',
+        access_token: 'ABC-123'
+      ).and_return('success' => false)
+      result = described_class.delete(access_token: 'ABC-123', catalog_id: '123456')
+      expect(result).to be_falsey
+    end
+  end
 end
