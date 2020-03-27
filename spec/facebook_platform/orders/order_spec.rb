@@ -79,6 +79,67 @@ RSpec.describe FacebookPlatform::Orders::Order do
   end
 
   context '.all' do
+    let(:response_with_canceled_order) do
+      # note there is no shipping_address node and buyer_details is stripped
+      JSON.parse('{
+        "data": [
+          {
+            "id": "237289070783440",
+            "buyer_details": {
+              "email_remarketing_option": false
+            },
+            "channel": "facebook",
+            "order_status": {
+              "state": "COMPLETED"
+            },
+            "estimated_payment_details": {
+              "subtotal": {
+                "items": {
+                  "amount": "18.00",
+                  "currency": "USD"
+                },
+                "shipping": {
+                  "amount": "10.00",
+                  "currency": "USD"
+                }
+              },
+              "tax": {
+                "amount": "2.73",
+                "currency": "USD"
+              },
+              "total_amount": {
+                "amount": "30.73",
+                "currency": "USD"
+              },
+              "tax_remitted": true
+            },
+            "created": "2020-03-26T03:42:49+00:00",
+            "last_updated": "2020-03-26T03:55:00+00:00",
+            "items": {
+              "data": [
+                {
+                  "id": "237289064116774",
+                  "product_id": "3126670884023613",
+                  "retailer_id": "15903_variant_id_7563",
+                  "quantity": 1,
+                  "price_per_unit": {
+                    "amount": "18.00",
+                    "currency": "USD"
+                  }
+                }
+              ],
+              "paging": {
+                "cursors": {
+                  "before": "QVFIUk1XU01HaU9uYWV5NWNVSDdOTjdBNGxhSj",
+                  "after": "QVFIUk1XU01HaU9uYWV5NWNVSDdOTjdBNGxhSjN"
+                }
+              }
+            }
+          }
+        ]
+      }')
+    end
+
     let(:response) do
       JSON.parse('{
         "data": [
@@ -141,6 +202,13 @@ RSpec.describe FacebookPlatform::Orders::Order do
             "after": "QVFIUkxqeHRvVTN0OXpSWWE4X3FwVkRtUkxobkYtWlVGN0FQbVpVZAFE4VEpzOTFvNzhpcGV2QzhxX25Z"
           }
         }
+      }')
+    end
+
+    let(:response_with_no_orders) do
+      JSON.parse('{
+        "data": [
+        ]
       }')
     end
 
@@ -293,6 +361,48 @@ RSpec.describe FacebookPlatform::Orders::Order do
         access_token: 'ABC-123',
         query_params: { state: 'CREATED,IN_PROGRESS', filters: 'no_cancellations' }
       )
+    end
+
+    it 'returns an empty array when there is no orders return' do
+      expect(FacebookPlatform::API).to receive(:get).with(
+        '12345/commerce_orders',
+        access_token: 'ABC-123',
+        fields: 'id'
+      ).and_return(response_with_no_orders)
+
+      results = described_class.all(page_id: '12345', access_token: 'ABC-123', fields: 'id')
+      expect(results).to eq([])
+    end
+
+    # note there is no shipping_address node in the response JSON and buyer_details data is stripped for canceled orders
+    it 'returns an objects array created from a request with canceled order details' do
+      expect(FacebookPlatform::API).to receive(:get).with(
+        '12345/commerce_orders',
+        access_token: 'ABC-123',
+        fields: 'id,buyer_details,channel,merchant_order_id,order_status,estimated_payment_details,created,last_updated,shipping_address,items'
+      ).and_return(response_with_canceled_order)
+
+      results = described_class.all(page_id: '12345', access_token: 'ABC-123')
+      first_record = results.first
+      expect(first_record.id).to eq('237289070783440')
+      expect(first_record.buyer_details.name).to be_nil
+      expect(first_record.buyer_details.email).to be_nil
+      expect(first_record.channel).to eq('facebook')
+      expect(first_record.state).to eq('COMPLETED')
+      expect(first_record.currency_code).to eq('USD')
+      expect(first_record.total_amount).to eq(30.73)
+      expect(first_record.total_tax_amount).to eq(2.73)
+      expect(first_record.items_total_amount).to eq(18.00)
+      expect(first_record.shipping_total_amount).to eq(10.00)
+      expect(first_record.shipping_address.name).to be_nil
+      expect(first_record.shipping_address.street1).to be_nil
+      expect(first_record.shipping_address.street2).to be_nil
+      expect(first_record.shipping_address.city).to be_nil
+      expect(first_record.shipping_address.state_code).to be_nil
+      expect(first_record.shipping_address.postal_code).to be_nil
+      expect(first_record.shipping_address.country_code).to be_nil
+      expect(first_record.items.first.retailer_id).to eq('15903_variant_id_7563')
+      expect(first_record.items.first.quantity).to eq(1)
     end
   end
 end
