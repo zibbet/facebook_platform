@@ -109,7 +109,7 @@ module FacebookPlatform
         @shipping_total_amount = BigDecimal(
           properties.dig('estimated_payment_details', 'subtotal', 'shipping', 'amount') || 0
         )
-        @shipping_address = ShippingAddress.new(properties['shipping_address'] || {})
+        @shipping_address = ShippingAddress.new(properties['shipping_address']) if properties['shipping_address']
         @created_at = DateTime.parse(properties['created'])
         @updated_at = DateTime.parse(properties['last_updated'])
         @items = properties.dig('items', 'data').map do |i|

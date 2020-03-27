@@ -394,13 +394,7 @@ RSpec.describe FacebookPlatform::Orders::Order do
       expect(first_record.total_tax_amount).to eq(2.73)
       expect(first_record.items_total_amount).to eq(18.00)
       expect(first_record.shipping_total_amount).to eq(10.00)
-      expect(first_record.shipping_address.name).to be_nil
-      expect(first_record.shipping_address.street1).to be_nil
-      expect(first_record.shipping_address.street2).to be_nil
-      expect(first_record.shipping_address.city).to be_nil
-      expect(first_record.shipping_address.state_code).to be_nil
-      expect(first_record.shipping_address.postal_code).to be_nil
-      expect(first_record.shipping_address.country_code).to be_nil
+      expect(first_record.shipping_address).to be_nil
       expect(first_record.items.first.retailer_id).to eq('15903_variant_id_7563')
       expect(first_record.items.first.quantity).to eq(1)
     end
