@@ -28,6 +28,11 @@ module FacebookPlatform
         result['success']
       end
 
+      def self.delete(access_token:, product_feed_id:)
+        result = API.delete(product_feed_id, access_token: access_token)
+        result['success']
+      end
+
       def initialize(id:)
         @id = id
       end

@@ -92,4 +92,30 @@ RSpec.describe FacebookPlatform::Products::Feed do
       expect(result).to be_truthy
     end
   end
+
+  context '.delete' do
+    it 'returns true on success' do
+      expect(FacebookPlatform::API).to receive(:delete).with(
+        '999022',
+        access_token: 'ABC-123'
+      ).and_return('success' => true)
+      result = described_class.delete(
+        access_token: 'ABC-123',
+        product_feed_id: '999022'
+      )
+      expect(result).to be_truthy
+    end
+
+    it 'returns false on fail' do
+      expect(FacebookPlatform::API).to receive(:delete).with(
+        '999022',
+        access_token: 'ABC-123'
+      ).and_return('success' => false)
+      result = described_class.delete(
+        access_token: 'ABC-123',
+        product_feed_id: '999022'
+      )
+      expect(result).to be_falsey
+    end
+  end
 end
