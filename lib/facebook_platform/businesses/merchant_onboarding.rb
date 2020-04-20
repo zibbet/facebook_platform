@@ -15,6 +15,16 @@ module FacebookPlatform
         result = API.post("#{cms_id}/order_management_apps", access_token: access_token)
         result['success']
       end
+
+      # the token here is USER_TOKEN
+      def self.disable_commerce_account(access_token:, cms_id:)
+        result = API.post(
+          cms_id,
+          access_token: access_token,
+          onsite_commerce_merchant: { merchant_status: 'externally_disabled' }
+        )
+        result['success']
+      end
     end
   end
 end

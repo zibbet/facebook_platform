@@ -49,4 +49,26 @@ RSpec.describe FacebookPlatform::Businesses::MerchantOnboarding do
       expect(result).to be_falsey
     end
   end
+
+  context '.disable_commerce_account' do
+    it 'returns true' do
+      expect(FacebookPlatform::API).to receive(:post).with(
+        '1234567', access_token: 'ABC-123', onsite_commerce_merchant: { merchant_status: 'externally_disabled' }
+      ).and_return(
+        'success' => true
+      )
+      result = described_class.disable_commerce_account(access_token: 'ABC-123', cms_id: '1234567')
+      expect(result).to be_truthy
+    end
+
+    it 'returns false' do
+      expect(FacebookPlatform::API).to receive(:post).with(
+        '1234567', access_token: 'ABC-123', onsite_commerce_merchant: { merchant_status: 'externally_disabled' }
+      ).and_return(
+        'success' => false
+      )
+      result = described_class.disable_commerce_account(access_token: 'ABC-123', cms_id: '1234567')
+      expect(result).to be_falsey
+    end
+  end
 end
