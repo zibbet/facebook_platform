@@ -99,7 +99,7 @@ RSpec.describe FacebookPlatform::Businesses::SystemUser do
   context '.get_id' do
     it 'returns user id' do
       expect(FacebookPlatform::API).to receive(:get).with(
-        '/me',
+        'me',
         access_token: 'ABC-123',
         fields: 'id'
       ).and_return('id' => 544)

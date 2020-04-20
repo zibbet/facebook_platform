@@ -43,7 +43,7 @@ module FacebookPlatform
       end
 
       def self.get_id(access_token:)
-        result = API.get('/me', access_token: access_token, fields: 'id')
+        result = API.get('me', access_token: access_token, fields: 'id')
         result['id']
       end
 

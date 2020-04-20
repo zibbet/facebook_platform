@@ -7,7 +7,7 @@ RSpec.describe FacebookPlatform::Businesses::MerchantOnboarding do
   context '.get_catalog_and_page_ids' do
     it 'returns a hash with page and catalog ids' do
       expect(FacebookPlatform::API).to receive(:get).with(
-        '/1234567', access_token: 'ABC-123', fields: 'product_catalogs,merchant_page'
+        '1234567', access_token: 'ABC-123', fields: 'product_catalogs,merchant_page'
       ).and_return(
         'product_catalogs' => {
           'data' => [
@@ -31,7 +31,7 @@ RSpec.describe FacebookPlatform::Businesses::MerchantOnboarding do
   context '.associate_order_management' do
     it 'returns true' do
       expect(FacebookPlatform::API).to receive(:post).with(
-        '/1234567/order_management_apps', access_token: 'ABC-123'
+        '1234567/order_management_apps', access_token: 'ABC-123'
       ).and_return(
         'success' => true
       )
@@ -41,7 +41,7 @@ RSpec.describe FacebookPlatform::Businesses::MerchantOnboarding do
 
     it 'returns false' do
       expect(FacebookPlatform::API).to receive(:post).with(
-        '/1234567/order_management_apps', access_token: 'ABC-123'
+        '1234567/order_management_apps', access_token: 'ABC-123'
       ).and_return(
         'success' => false
       )
