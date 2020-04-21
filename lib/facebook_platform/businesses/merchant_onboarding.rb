@@ -16,7 +16,7 @@ module FacebookPlatform
         result['success']
       end
 
-      # the token here is USER_TOKEN
+      # The token here is PAGE_ACCESS_TOKEN
       def self.disable_commerce_account(access_token:, cms_id:)
         result = API.post(
           cms_id,
