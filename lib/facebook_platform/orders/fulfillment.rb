@@ -38,8 +38,8 @@ module FacebookPlatform
         result = API.post(
           "#{order_id}/shipments",
           access_token: access_token,
-          items: shipments.map(&:to_h),
-          tracking_info: tracking_info.to_h,
+          items: shipments.map(&:to_h).to_json,
+          tracking_info: tracking_info.to_h.to_json,
           idempotency_key: SecureRandom.uuid
         )
         result['success']

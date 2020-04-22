@@ -41,8 +41,8 @@ RSpec.describe FacebookPlatform::Orders::Fulfillment do
       expect(FacebookPlatform::API).to receive(:post).with(
         '64000841784004/shipments',
         access_token: 'ABC-123',
-        items: [{ retailer_id: 'FB_product_1238', quantity: 1 }, { retailer_id: 'FB_product_5624', quantity: 2 }],
-        tracking_info: { tracking_number: 'ship 1', carrier: 'FEDEX' },
+        items: '[{"retailer_id":"FB_product_1238","quantity":1},{"retailer_id":"FB_product_5624","quantity":2}]',
+        tracking_info: '{"tracking_number":"ship 1","carrier":"FEDEX"}',
         idempotency_key: 'UUID'
       ).and_return('success' => true)
 
@@ -60,8 +60,8 @@ RSpec.describe FacebookPlatform::Orders::Fulfillment do
       expect(FacebookPlatform::API).to receive(:post).with(
         '64000841784004/shipments',
         access_token: 'ABC-123',
-        items: [],
-        tracking_info: {},
+        items: '[]',
+        tracking_info: '{}',
         idempotency_key: 'UUID'
       ).and_return('success' => false)
 
