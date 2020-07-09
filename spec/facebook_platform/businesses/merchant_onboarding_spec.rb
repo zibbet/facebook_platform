@@ -71,4 +71,34 @@ RSpec.describe FacebookPlatform::Businesses::MerchantOnboarding do
       expect(result).to be_falsey
     end
   end
+
+  context '.instagram_channel' do
+    it 'returns a hash with instagram_channel details' do
+      expect(FacebookPlatform::API).to receive(:get).with(
+        '1234567', access_token: 'ABC-123', fields: 'instagram_channel'
+      ).and_return(
+        'instagram_channel' => {
+          'instagram_users' => {
+            'data' => [
+              {
+                'id' => '123'
+              }
+            ]
+          }
+        }
+      )
+      result = described_class.instagram_channel(access_token: 'ABC-123', cms_id: '1234567')
+      expect(result).to eq({ 'instagram_users' => { 'data' => [{ 'id' => '123' }] } })
+    end
+
+    it 'returns nil if no instagram_channel' do
+      expect(FacebookPlatform::API).to receive(:get).with(
+        '1234567', access_token: 'ABC-123', fields: 'instagram_channel'
+      ).and_return(
+        'id' => '123'
+      )
+      result = described_class.instagram_channel(access_token: 'ABC-123', cms_id: '1234567')
+      expect(result).to be_nil
+    end
+  end
 end

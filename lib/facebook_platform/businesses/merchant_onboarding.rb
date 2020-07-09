@@ -25,6 +25,12 @@ module FacebookPlatform
         )
         result['success']
       end
+
+      # The token here is PAGE_ACCESS_TOKEN or SYSTEM_ADMIN_USER_TOKEN
+      def self.instagram_channel(access_token:, cms_id:)
+        result = API.get(cms_id, access_token: access_token, fields: 'instagram_channel')
+        result['instagram_channel']
+      end
     end
   end
 end
