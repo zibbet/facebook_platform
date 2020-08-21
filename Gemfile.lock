@@ -2,14 +2,14 @@ PATH
   remote: .
   specs:
     facebook_platform (0.1.0)
-      faraday (= 0.15.4)
+      faraday (~> 1.0.1)
 
 GEM
   remote: https://rubygems.org/
   specs:
     ast (2.4.0)
     diff-lcs (1.3)
-    faraday (0.15.4)
+    faraday (1.0.1)
       multipart-post (>= 1.2, < 3)
     jaro_winkler (1.5.4)
     multipart-post (2.1.1)
